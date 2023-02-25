@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from werkzeug.exceptions import NotFound
 
 users_app = Blueprint("users_app", __name__)
+
 USERS = {
     1: "James",
     2: "Brian",
