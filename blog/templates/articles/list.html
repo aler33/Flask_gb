@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Articles list
+{% endblock %}
+
+{%block body %}
+  <h4>Articles</h4>
+  <div>
+    <ul>
+      {% for title in articles %}
+        <li>
+          <a href="{{ url_for('articles_app.details', article_id=title) }}">{{ articles[title]['name'] }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

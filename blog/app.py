@@ -1,5 +1,7 @@
-from flask import Flask, request, g
+from flask import Flask, request, g, render_template
 from time import time
+from blog.views.users import users_app
+from blog.views.articles import articles_app
 
 
 app = Flask(__name__)
@@ -13,41 +15,13 @@ def process_before_request():
     g.start_time = time()
 
 
+app.register_blueprint(users_app, url_prefix="/users")
+app.register_blueprint(articles_app, url_prefix="/articles")
+
+
 @app.route("/")
 def index():
-    return "Hello web!"
-
-
-@app.route("/test/<name_1>/")
-def greet_name(name_1: str):
-    return f'Hello {name_1}!'
-
-
-@app.route("/user/")
-def read_user():
-    name = request.args.get("name")
-    surname = request.args.get("surname")
-    return f"User {name or '[no name]'} {surname or '[no surname]'}"
-
-
-@app.route("/status/", methods=["GET", "POST"])
-def custom_status_code():
-    if request.method == "GET":
-        return """\
-        To get response with custom status code
-        send request using POST method
-        and pass `code` in JSON body / FormData
-        """
-
-    print("raw bytes data:", request.data)
-
-    if request.form and "code" in request.form:
-        return f'"code from form", {request.form["code"]}'
-
-    if request.json and "code" in request.json:
-        return f'"code from json", {request.json["code"]}'
-
-    return f'"", 204'
+    return render_template("index.html")
 
 
 @app.after_request
