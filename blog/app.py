@@ -6,7 +6,8 @@ from blog.models.database import db
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/blog.db"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/blog.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////home/alexey/gb_lesson/Flask_g/Flask_gb/blog/blog.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
@@ -36,3 +37,29 @@ def process_after_request(response):
         response.headers["process-time"] = time() - g.start_time
 
     return response
+
+
+@app.cli.command("init-db")
+def init_db():
+    """
+    Run in terminal:
+    flask init-db
+    """
+    db.create_all()
+
+
+@app.cli.command("create-users")
+def create_users():
+    """
+    Run in terminal:
+    flask create-users
+    """
+    from blog.models import User
+    admin = User(username='admin', is_staff=True, email='admin@localhost.ru')
+    james = User(username="james", email='james@localhost.ru')
+
+    db.session.add(admin)
+    db.session.add(james)
+    db.session.commit()
+
+    print("done! created users:", admin, james)

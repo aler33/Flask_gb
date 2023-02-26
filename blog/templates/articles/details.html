@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block body %}
-<h4>Article's detail</h2>
+<h4>Article's detail</h4>
 
 <ul>
     <li>
         Name: {{ article_name.name }}
     </li>
     <li>
-        Author: <a href="{{ url_for('users_app.details', user_id=article_name['author']) }}">{{ users[article_name['author']] }}</a>
+        Author: <a href="{{ url_for('users_app.details', user_id=article_name['author']) }}">{{ users[article_id-1].username }}</a>
     </li>
     <li>
         Article: {{ article_name.text }}
