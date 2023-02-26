@@ -2,10 +2,13 @@ from flask import Flask, request, g, render_template
 from time import time
 from blog.views.users import users_app
 from blog.views.articles import articles_app
+from blog.models.database import db
 
 
 app = Flask(__name__)
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/blog.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
 
 @app.before_request
 def process_before_request():
