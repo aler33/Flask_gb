@@ -40,3 +40,16 @@ def login():
 
     login_user(user)
     return redirect(url_for("index"))
+
+
+@auth_app.route("/logout/", endpoint="logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
+@auth_app.route("/secret/")
+@login_required
+def secret_view():
+    return "Super secret data"
