@@ -10,14 +10,13 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/blog.db"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////home/alexey/gb_lesson/Flask_g/Flask_gb/blog/blog.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = "abcdefg123456"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////home/alexey/gb_lesson/Flask_g/Flask_gb/blog/blog.db"
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config["SECRET_KEY"] = "abcdefg123456"
 cfg_name = os.environ.get("CONFIG_NAME") or "ProductionConfig"
 app.config.from_object(f"blog.configs.{cfg_name}")
 db.init_app(app)
 
-migrate = Migrate(app, db)
 
 @app.before_request
 def process_before_request():
@@ -32,6 +31,8 @@ app.register_blueprint(articles_app, url_prefix="/articles")
 app.register_blueprint(auth_app, url_prefix="/auth")
 
 login_manager.init_app(app)
+
+migrate = Migrate(app, db, compare_type=True)
 
 
 @app.route("/")
