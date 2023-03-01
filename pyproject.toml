@@ -11,6 +11,7 @@ python = "^3.10"
 flask = "^2.2.3"
 flask-sqlalchemy = "^3.0.3"
 flask-login = "^0.6.2"
+flask-migrate = "^4.0.4"
 
 
 [build-system]
