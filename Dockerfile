@@ -11,6 +11,6 @@ COPY blog ./blog
 
 EXPOSE 5000
 
-CMD ["flask", "init-db"]
+CMD ["flask", "db", "upgrade"]
 CMD ["flask", "create-users"]
 CMD ["python", "wsgi.py"]
