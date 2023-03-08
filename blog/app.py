@@ -6,6 +6,7 @@ from blog.views.auth import login_manager, auth_app
 from blog.models.database import db
 import os
 from flask_migrate import Migrate
+from blog.security import flask_bcrypt
 
 
 app = Flask(__name__)
@@ -32,6 +33,8 @@ app.register_blueprint(auth_app, url_prefix="/auth")
 
 login_manager.init_app(app)
 
+flask_bcrypt.init_app(app)
+
 migrate = Migrate(app, db, compare_type=True)
 
 
@@ -50,16 +53,18 @@ def process_after_request(response):
 
     return response
 
+# It's old function before create migration
 
-@app.cli.command("init-db")
-def init_db():
-    """
-    Run in terminal:
-    flask init-db
-    """
-    db.create_all()
+# @app.cli.command("init-db")
+# def init_db():
+#     """
+#     Run in terminal:
+#     flask init-db
+#     """
+#     db.create_all()
 
 
+# created command for create users
 @app.cli.command("create-users")
 def create_users():
     """
@@ -68,9 +73,13 @@ def create_users():
     """
     from blog.models import User
     admin = User(username='admin', is_staff=True, email='admin@localhost.ru')
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "adminpass"
     james = User(username="James", email='james@localhost.ru')
+    james.password = os.environ.get("JAMES_PASSWORD") or "1"
     brian = User(username="Brian", email='brian@localhost.ru')
+    brian.password = os.environ.get("BRIAN_PASSWORD") or "1"
     peter = User(username="Peter", email='peter@localhost.ru')
+    peter.password = os.environ.get("PETER_PASSWORD") or "1"
 
     db.session.add(admin)
     db.session.add(james)
@@ -79,3 +88,19 @@ def create_users():
     db.session.commit()
 
     print("done! created users:", admin, james)
+
+# created command for create admin
+@app.cli.command("create-admin")
+def create_admin():
+    """
+    Run in terminal:
+    flask create-admin
+    """
+    from blog.models import User
+    admin = User(username='admin', is_staff=True, email='admin@localhost.ru')
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "adminpass"
+
+    db.session.add(admin)
+    db.session.commit()
+
+    print("done! created admin:", admin)
