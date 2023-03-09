@@ -1,40 +1,15 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 # from blog.views.users import USERS
 from werkzeug.exceptions import NotFound
-from blog.models import User
+# from blog.models import User
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 from blog.models.database import db
-from blog.models import Article, Author
+from blog.models import Article, Author, User
 from blog.forms.article import  CreateArticleForm
 
 articles_app = Blueprint("articles_app", __name__)
-
-
-# ARTICLES = ["Flask", "Django", "JSON:API"]
-# ARTICLES = {
-#     1: {
-#         'name': 'First article',
-#         'text': 'Text first article',
-#         'author': 4
-#     },
-#     2: {
-#         'name': 'Second article',
-#         'text': 'Text second article',
-#         'author': 2,
-#     },
-#     3: {
-#         'name': 'Third article',
-#         'text': 'Text second article',
-#         'author': 3,
-#     },
-#     4: {
-#         'name': 'Fourth article',
-#         'text': 'Text second article',
-#         'author': 4,
-#     }
-# }
 
 
 @articles_app.route("/", endpoint="list")
@@ -71,7 +46,7 @@ def create_article():
 
         try:
             db.session.commit()
-        except ImportError:
+        except IntegrityError:
             current_app.logger.exception("Could not create a new article.")
             error = "Could not create article"
         else:

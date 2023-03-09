@@ -9,6 +9,7 @@
   <div>
     <p>{{ article.body }}</p>
     <div> Published {{ article.dt_created }}</div>
-    <div>by {{article.author.user.username }}</div>
+    <div>by <a href="{{ url_for('users_app.details', user_id=article.author.user.id) }}">{{ article.author.user.username }}</a>
+    </div>
   </div>
 {% endblock %}
