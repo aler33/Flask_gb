@@ -4,6 +4,7 @@ from blog.views.users import users_app
 from blog.views.articles import articles_app
 from blog.views.auth import login_manager, auth_app
 from blog.views.authors import authors_app
+from blog.views.tags import tags_app
 from blog.models.database import db
 import os
 from flask_migrate import Migrate
@@ -32,6 +33,7 @@ app.register_blueprint(users_app, url_prefix="/users")
 app.register_blueprint(articles_app, url_prefix="/articles")
 app.register_blueprint(auth_app, url_prefix="/auth")
 app.register_blueprint(authors_app, url_prefix="/authors")
+app.register_blueprint(tags_app, url_prefix="/tags")
 
 login_manager.init_app(app)
 
@@ -106,3 +108,24 @@ def create_admin():
     db.session.commit()
 
     print("done! created admin:", admin)
+
+
+@app.cli.command("create-tags")
+def create_tags():
+    """
+    Run in terminal:
+    flask create-tags
+    """
+    from blog.models import Tag
+    for name in [
+        "flask",
+        "django",
+        "python",
+        "sqlalchemy",
+        "news",
+        "fastapi",
+    ]:
+        tag = Tag(name=name)
+        db.session.add(tag)
+    db.session.commit()
+    print("created tags")
