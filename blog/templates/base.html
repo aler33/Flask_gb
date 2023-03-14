@@ -35,6 +35,7 @@
                     ('users_app.list', 'Users'),
                     ('authors_app.list', 'Authors'),
                     ('articles_app.list', 'Articles'),
+                    ('tags_app.list', 'Tags'),
                   ] %}
                     <a href="{{ url_for(endpoint) }}"
                         class="nav-link {% if request.endpoint == endpoint -%}active{%- endif %}"
