@@ -1,4 +1,4 @@
-from flask import Flask, request, g, render_template
+from flask import Flask, g, render_template
 from time import time
 from blog.views.users import users_app
 from blog.views.articles import articles_app
@@ -10,6 +10,7 @@ import os
 from flask_migrate import Migrate
 from blog.security import flask_bcrypt
 from blog.admin import admin
+from blog.api import init_api
 
 
 app = Flask(__name__)
@@ -42,6 +43,8 @@ login_manager.init_app(app)
 flask_bcrypt.init_app(app)
 
 migrate = Migrate(app, db, compare_type=True)
+
+api = init_api(app)
 
 
 @app.route("/")
