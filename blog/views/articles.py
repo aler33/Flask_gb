@@ -9,6 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from blog.models.database import db
 from blog.models import Article, Author, User, Tag
 from blog.forms.article import  CreateArticleForm
+import requests
+
 
 articles_app = Blueprint("articles_app", __name__)
 
@@ -17,6 +19,19 @@ articles_app = Blueprint("articles_app", __name__)
 def articles_list():
     articles = Article.query.all()
     return render_template("articles/list.html", articles=articles)
+
+
+@articles_app.route("/api/", endpoint="list_api")
+def api_articles_list():
+    """
+    Function for get articles list from api
+    :return:
+    """
+    response = requests.get(
+        "http://127.0.0.1:5000/api/articles/?include=author%2Ctags&page%5Bnumber%5D=1&page%5Bsize%5D=10"
+    )
+    articles = response.json()
+    return render_template("articles/apilist.html", articles=articles)
 
 
 @articles_app.route("/<int:article_id>/", endpoint="details")
